@@ -155,3 +155,9 @@ Unit of diversion: cookie, and userIDs after the user has enrolled. This way we'
 
 <!-- Give a high-level description of the follow up experiment you would run, what your hypothesis would be, what metrics you would want to measure, what your unit of diversion would be, and your reasoning for these choices. -->
 
+## Resources
+[Udacity A/B testing course](https://www.udacity.com/course/ab-testing--ud257)<br>
+[Sample size calulator](http://www.evanmiller.org/ab-testing/sample-size.html)<br>
+[Binomial p-value calculator](http://graphpad.com/quickcalcs/binomial1.cfm)<br>
+[Wiki: multiple comparisons problem](https://en.wikipedia.org/wiki/Multiple_comparisons_problem)
+
