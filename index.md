@@ -24,13 +24,18 @@ Number of clicks: the tested feature appears after the click on "Start Now" butt
 Click-through probability: the tested feature appears after the click, so probability of a click shouldn't change.
 
 __Evaluation metrics:__<br>
-Gross conversion: number of enrolled UserIDs divided by the number of clicks.<br>
+Gross conversion: number of enrolled user-ids divided by the number of clicks.<br>
 Practical significance boundary: 1% increase.
 
-Net conversion: number of UserIDs who remain enrolled for at least 14 days (and thus make a payment) divided by the number of clicks.<br>
+Net conversion: number of user-ids who remain enrolled for at least 14 days (and thus make a payment) divided by the number of clicks.<br>
 Practical significance boundary: 0.75% increase.
 
-To launch the experiment, I will need one of the evaluation metrics to pass the practical significance boundary, and the other one to at least be statistically significant. This way we are reducing familywise error rate.
+To if our hypothesis is true, than we will have less students quitting the course in the first 14 days, but the number of students enrolling in the course will not be reduced.
+That means that to launch the change I'll need net conversion to increase, and gross conversion to at least not decrease (I'm talking about practical increase/decrease, as opposed to statistical).
+
+__Unused metrics:__<br>
+Number of user-ids: this metric will change, but we only care about relative change to the number of clicks, not absolute value.
+Retention: this is basically net conversion divided by gross conversion, so retention isn't necessary as we track both conversions.
 
 <!-- List which metrics you will use as invariant metrics and evaluation metrics here. (These should be the same metrics you chose in the "Choosing Invariant Metrics" and "Choosing Evaluation Metrics" quizzes.)
 
@@ -94,8 +99,8 @@ Number of clicks:
 - Sanity check: Passed
 
 Click-through probability difference:
-- 95% CI: [-0.13%, 0.13%] 
-- Observed value: 0.01%
+- 95% CI: [-0.0013, 0.0013] 
+- Observed value: 0.0001
 - Sanity check: Passed
 
 <!-- For each of your invariant metrics, give the 95% confidence interval for the value you expect to observe, the actual observed value, and whether the metric passes your sanity check. (These should be the answers from the "Sanity Checks" quiz.)
@@ -105,12 +110,12 @@ For any sanity check that did not pass, explain your best guess as to what went 
 ###Result Analysis
 __Effect Size Tests__<br>
 Gross conversion difference:
-- 95% CI: [-2.91%, -1.20%]
+- 95% CI: [-0.0291, -0.0120]
 - Statistical significance: Yes
 - Practical significance: Yes, although in the negative side
 
 Net conversion difference:
-- 95% CI: [-1.16%, 0.19%]
+- 95% CI: [-0.0116, 0.0019]
 - Statistical significance: No
 - Practical significance: No
 
@@ -130,28 +135,33 @@ The result isn't statistically significant.
 <!-- For each of your evaluation metrics, do a sign test using the day-by-day data, and report the p-value of the sign test and whether the result is statistically significant. (These should be the answers from the "Sign Tests" quiz.) -->
 
 __Summary__<br>
-I didn't use Bonferroni correction, as I only have two metrics, and I addressed the familywise error rate by choosing to recommend the feature only if both metrics are at least statistically significant.
+I didn't use Bonferroni correction, as I need both metrics to match my alternative hypothesis assumptions in order to launch the change.
 
 For both metrics, effect size test and sign test agree.
 <!-- State whether you used the Bonferroni correction, and explain why or why not. If there are any discrepancies between the effect size hypothesis tests and the sign tests, describe the discrepancy and why you think it arose. -->
 
 ###Recommendation
-The gross conversion difference is significantly negative, and even passes the practical significance boundary of 1%.<br>
-Although the net conversion difference isn't statistically significant, it also leans to the negative side in both effect size test and sign test.
+To launch the change, we need net conversion to increase, and gross conversion to not decrease.
+In the experiment, net conversion didn't change, and gross conversion decreased.<br>
+Thus, the change should not be launched.
 
-It is clear that the proposed change will reduce our evaluated metrics, and thus we shouldn't launch this change.
+We can reason that the prompt reduced gross conversion rate because every time a user encounteres an "obstacle" on his path to a desired action, she could reconsider.<br>
 <!-- Make a recommendation and briefly describe your reasoning. -->
 
 ##Follow-Up Experiment
-It's expected that adding a prompt could reduce the conversion rates: every time a user encounteres an "obstacle" on his path to a desired action, he could reconsider.<br>
-We might also guess that if a user is interested in a course, he already knows that he has enough time available.
+Another experiment to try is to present a user before she starts the course and the 14-day trial period (but after registering and enrolling) with "Lesson 0", where he's given an overview on the topics covered, the depth level, time required to complete and other things instuctors find entertaining. This lesson should't take more than a couple hours.<br>
+We need to make sure that all courses contain such overviews before starting the experiment.<br>
 
-Another experiment to try could to ask a person to enroll into paid version only after a person completes "Lesson 0", where he's given an overview on the topics covered, the depth level, time required to complete and other things  instuctors find entertaining. This lesson should't take more than a couple hours.<br>
-We need to make sure that all courses contain such overviews before starting the experiment.
+The hypothesis is that when a user will really understands what the course is about and its structure, she will better know if she's ready to take the paid version. Thus the users, who would probably get frustrated further in the course and leave, will not proceed after Lesson 0, sparing time of our coaches and generally having better experience with Udacity.<br>
+For myself, I'd be happy to take more courses on Udacity on the topics that I haven't yet explored, if I knew which courses will be interesting for me. I could figure this out with an extended overview like a proposed "Lesson 0".
 
-The hypothesis is that when a person really understands what the course is about and what's its structure, he will better know if he's ready to take the paid version.<br>
-The metrics that we'd want to measure could be: gross conversion (number of cookies who start the course divided by number of clicks by unique cookies), Lesson 0 completion rate, and retention rate (number of UserIDs who make a payment divided by the number of users who complete lesson 0). This way we will measure how people progress on all three steps of the path "click -> lesson 0 -> lesson 0 complete -> first payment".<br>
-Unit of diversion: cookie, and userIDs after the user has enrolled. This way we'll ensure consistent exerience for the users.
+Invariant metrics: number of clicks, number of user-ids and click-through probability.<br>
+These metrics shouldn't change as we are only altering the course after the enrollment.
+
+Evaluation metrics: Lesson 0 dropout rate (equals 0 for control group) and retention rate (number of users who make a payment divided by the number of enrolled users).<br>
+Figuring out  practical significance boundary for L0 dropout rate could be tricky, but if it is at least statistically significant, than we have successfully fitered out some people who would have otherwise dropped out further in the course.
+
+Unit of diversion: user-id. This way we'll ensure consistent exerience for the users.
 
 <!-- Give a high-level description of the follow up experiment you would run, what your hypothesis would be, what metrics you would want to measure, what your unit of diversion would be, and your reasoning for these choices. -->
 

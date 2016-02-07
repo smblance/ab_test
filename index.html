@@ -754,13 +754,18 @@ Number of clicks: the tested feature appears after the click on "Start Now" butt
 Click-through probability: the tested feature appears after the click, so probability of a click shouldn't change.</p>
 
 <p><strong>Evaluation metrics:</strong><br>
-Gross conversion: number of enrolled UserIDs divided by the number of clicks.<br>
+Gross conversion: number of enrolled user-ids divided by the number of clicks.<br>
 Practical significance boundary: 1% increase.</p>
 
-<p>Net conversion: number of UserIDs who remain enrolled for at least 14 days (and thus make a payment) divided by the number of clicks.<br>
+<p>Net conversion: number of user-ids who remain enrolled for at least 14 days (and thus make a payment) divided by the number of clicks.<br>
 Practical significance boundary: 0.75% increase.</p>
 
-<p>To launch the experiment, I will need one of the evaluation metrics to pass the practical significance boundary, and the other one to at least be statistically significant. This way we are reducing familywise error rate.</p>
+<p>To if our hypothesis is true, than we will have less students quitting the course in the first 14 days, but the number of students enrolling in the course will not be reduced.
+That means that to launch the change I'll need net conversion to increase, and gross conversion to at least not decrease (I'm talking about practical increase/decrease, as opposed to statistical).</p>
+
+<p><strong>Unused metrics:</strong><br>
+Number of user-ids: this metric will change, but we only care about relative change to the number of clicks, not absolute value.
+Retention: this is basically net conversion divided by gross conversion, so retention isn't necessary as we track both conversions.</p>
 
 
 
@@ -841,8 +846,8 @@ All in all, I wouldn't consider this experiment risky for Udacity.</p>
 <p>Click-through probability difference:</p>
 
 <ul>
-<li>95% CI: [-0.13%, 0.13%] </li>
-<li>Observed value: 0.01%</li>
+<li>95% CI: [-0.0013, 0.0013] </li>
+<li>Observed value: 0.0001</li>
 <li>Sanity check: Passed</li>
 </ul>
 
@@ -855,7 +860,7 @@ All in all, I wouldn't consider this experiment risky for Udacity.</p>
 Gross conversion difference:</p>
 
 <ul>
-<li>95% CI: [-2.91%, -1.20%]</li>
+<li>95% CI: [-0.0291, -0.0120]</li>
 <li>Statistical significance: Yes</li>
 <li>Practical significance: Yes, although in the negative side</li>
 </ul>
@@ -863,7 +868,7 @@ Gross conversion difference:</p>
 <p>Net conversion difference:</p>
 
 <ul>
-<li>95% CI: [-1.16%, 0.19%]</li>
+<li>95% CI: [-0.0116, 0.0019]</li>
 <li>Statistical significance: No</li>
 <li>Practical significance: No</li>
 </ul>
@@ -884,7 +889,7 @@ The result isn't statistically significant.</p>
 
 
 <p><strong>Summary</strong><br>
-I didn't use Bonferroni correction, as I only have two metrics, and I addressed the familywise error rate by choosing to recommend the feature only if both metrics are at least statistically significant.</p>
+I didn't use Bonferroni correction, as I need both metrics to match my alternative hypothesis assumptions in order to launch the change.</p>
 
 <p>For both metrics, effect size test and sign test agree.</p>
 
@@ -893,25 +898,30 @@ I didn't use Bonferroni correction, as I only have two metrics, and I addressed 
 <h3>
 <a id="user-content-recommendation" class="anchor" href="#recommendation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Recommendation</h3>
 
-<p>The gross conversion difference is significantly negative, and even passes the practical significance boundary of 1%.<br>
-Although the net conversion difference isn't statistically significant, it also leans to the negative side in both effect size test and sign test.</p>
+<p>To launch the change, we need net conversion to increase, and gross conversion to not decrease.
+In the experiment, net conversion didn't change, and gross conversion decreased.<br>
+Thus, the change should not be launched.</p>
 
-<p>It is clear that the proposed change will reduce our evaluated metrics, and thus we shouldn't launch this change.</p>
+<p>We can reason that the prompt reduced gross conversion rate because every time a user encounteres an "obstacle" on his path to a desired action, she could reconsider.<br></p>
 
 
 
 <h2>
 <a id="user-content-follow-up-experiment" class="anchor" href="#follow-up-experiment" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Follow-Up Experiment</h2>
 
-<p>It's expected that adding a prompt could reduce the conversion rates: every time a user encounteres an "obstacle" on his path to a desired action, he could reconsider.<br>
-We might also guess that if a user is interested in a course, he already knows that he has enough time available.</p>
+<p>Another experiment to try is to present a user before she starts the course and the 14-day trial period (but after registering and enrolling) with "Lesson 0", where he's given an overview on the topics covered, the depth level, time required to complete and other things instuctors find entertaining. This lesson should't take more than a couple hours.<br>
+We need to make sure that all courses contain such overviews before starting the experiment.<br></p>
 
-<p>Another experiment to try could to ask a person to enroll into paid version only after a person completes "Lesson 0", where he's given an overview on the topics covered, the depth level, time required to complete and other things  instuctors find entertaining. This lesson should't take more than a couple hours.<br>
-We need to make sure that all courses contain such overviews before starting the experiment.</p>
+<p>The hypothesis is that when a user will really understands what the course is about and its structure, she will better know if she's ready to take the paid version. Thus the users, who would probably get frustrated further in the course and leave, will not proceed after Lesson 0, sparing time of our coaches and generally having better experience with Udacity.<br>
+For myself, I'd be happy to take more courses on Udacity on the topics that I haven't yet explored, if I knew which courses will be interesting for me. I could figure this out with an extended overview like a proposed "Lesson 0".</p>
 
-<p>The hypothesis is that when a person really understands what the course is about and what's its structure, he will better know if he's ready to take the paid version.<br>
-The metrics that we'd want to measure could be: gross conversion (number of cookies who start the course divided by number of clicks by unique cookies), Lesson 0 completion rate, and retention rate (number of UserIDs who make a payment divided by the number of users who complete lesson 0). This way we will measure how people progress on all three steps of the path "click -&gt; lesson 0 -&gt; lesson 0 complete -&gt; first payment".<br>
-Unit of diversion: cookie, and userIDs after the user has enrolled. This way we'll ensure consistent exerience for the users.</p>
+<p>Invariant metrics: number of clicks, number of user-ids and click-through probability.<br>
+These metrics shouldn't change as we are only altering the course after the enrollment.</p>
+
+<p>Evaluation metrics: Lesson 0 dropout rate (equals 0 for control group) and retention rate (number of users who make a payment divided by the number of enrolled users).<br>
+Figuring out  practical significance boundary for L0 dropout rate could be tricky, but if it is at least statistically significant, than we have successfully fitered out some people who would have otherwise dropped out further in the course.</p>
+
+<p>Unit of diversion: user-id. This way we'll ensure consistent exerience for the users.</p>
 
 
 
