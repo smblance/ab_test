@@ -732,7 +732,7 @@ pre {
 <p>Web-site: Udacity.com<br>
 Experiment: Time availability prompt.<br>
 Expected result: Filter out students who don't have enough time before they enroll.<br>
-Unit of diversion: cookie before enroll, UserID after enroll.</p>
+Unit of diversion: cookie.</p>
 
 <p>At the time of this experiment, Udacity courses currently have two options on the home page: "start free trial", and "access course materials". If the student clicks "start free trial", they will be asked to enter their credit card information, and then they will be enrolled in a free trial for the paid version of the course. After 14 days, they will automatically be charged unless they cancel first. If the student clicks "access course materials", they will be able to view the videos and take the quizzes for free, but they will not receive coaching support or a verified certificate, and they will not submit their final project for feedback.</p>
 
@@ -755,16 +755,33 @@ Click-through probability: the tested feature appears after the click, so probab
 
 <p><strong>Evaluation metrics:</strong><br>
 Gross conversion: number of enrolled user-ids divided by the number of clicks.<br>
-Practical significance boundary: 1% increase.</p>
+Practical significance boundary: 1%</p>
 
 <p>Net conversion: number of user-ids who remain enrolled for at least 14 days (and thus make a payment) divided by the number of clicks.<br>
-Practical significance boundary: 0.75% increase.</p>
+Practical significance boundary: 0.75%</p>
 
-<p>To if our hypothesis is true, than we will have less students quitting the course in the first 14 days, but the number of students enrolling in the course will not be reduced.
-That means that to launch the change I'll need net conversion to increase, and gross conversion to at least not decrease (I'm talking about practical increase/decrease, as opposed to statistical).</p>
+<p>In order to launch the change, we'd want the change to have these effects:</p>
+
+<ul>
+<li>reduce the number of enrollments, so that the users, who would leave the course between enrollment and payment in case they enroll, are filtered out before enrollment.</li>
+<li>not reduce the number of payments</li>
+</ul>
+
+<p>In terms of metrics this would be:</p>
+
+<ul>
+<li>gross conversion is reduced</li>
+<li>net conversion is not reduced (either is incrased or stays the same)</li>
+</ul>
+
+<p>An example of a desirable situation:<br>
+Control: 100 click, 20 enroll, 10 pay<br>
+Experiment: 100 click, 10 enroll, 10 pay.<br>
+In the control group we have 10 enrolled users quit before payment, but in the experiment group these users didn't enroll.<br>
+Here, gross conversion is reduced from 20% to 10%, but net conversion is still 10%, meaning that we didn't lose paying users.</p>
 
 <p><strong>Unused metrics:</strong><br>
-Number of user-ids: this metric will change, but we only care about relative change to the number of clicks, not absolute value.
+Number of user-ids: this metric will change, but we only care about relative change to the number of clicks, not the absolute value.<br>
 Retention: this is basically net conversion divided by gross conversion, so retention isn't necessary as we track both conversions.</p>
 
 
@@ -862,7 +879,7 @@ Gross conversion difference:</p>
 <ul>
 <li>95% CI: [-0.0291, -0.0120]</li>
 <li>Statistical significance: Yes</li>
-<li>Practical significance: Yes, although in the negative side</li>
+<li>Practical significance: Yes</li>
 </ul>
 
 <p>Net conversion difference:</p>
@@ -870,7 +887,7 @@ Gross conversion difference:</p>
 <ul>
 <li>95% CI: [-0.0116, 0.0019]</li>
 <li>Statistical significance: No</li>
-<li>Practical significance: No</li>
+<li>Practical significance: The lower bound of the interval passes the practical significance boundary of 0.75%, so there's a possibility that the change actually reduces the net conversion by a practical boundary, which is not what we want.</li>
 </ul>
 
 
@@ -879,7 +896,7 @@ Gross conversion difference:</p>
 Gross conversion difference:<br>
 4 positive (gross conversion higher in experimental group) out of 23.<br>
 P-value: 0.0026<br>
-The result is statistically significant, although gross conversion is lower in the experiment group, which is not what we want.</p>
+The result is statistically significant.</p>
 
 <p>Net conversion difference:<br>
 10 positive (net conversion higher in experimental group) out of 23.<br>
@@ -889,7 +906,7 @@ The result isn't statistically significant.</p>
 
 
 <p><strong>Summary</strong><br>
-I didn't use Bonferroni correction, as I need both metrics to match my alternative hypothesis assumptions in order to launch the change.</p>
+I didn't use Bonferroni correction, as I need both metrics to match my alternative hypothesis in order to launch the change.</p>
 
 <p>For both metrics, effect size test and sign test agree.</p>
 
@@ -898,11 +915,11 @@ I didn't use Bonferroni correction, as I need both metrics to match my alternati
 <h3>
 <a id="user-content-recommendation" class="anchor" href="#recommendation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Recommendation</h3>
 
-<p>To launch the change, we need net conversion to increase, and gross conversion to not decrease.
-In the experiment, net conversion didn't change, and gross conversion decreased.<br>
-Thus, the change should not be launched.</p>
+<p>To launch the change, we need net conversion to not decrease, and gross conversion to decrease.<br>
+The gross conversion decreased in the experiment, but there is not enough confidence that the net conversion did not decrease.<br>
+Thus, with the current information, the change should not be launched.</p>
 
-<p>We can reason that the prompt reduced gross conversion rate because every time a user encounteres an "obstacle" on his path to a desired action, she could reconsider.<br></p>
+<p>We can conclude that the time availability prompt successfully filters out some of the users who would leave before payment, but we are unsure whether it also filters out paying users.</p>
 
 
 
@@ -915,8 +932,7 @@ We need to make sure that all courses contain such overviews before starting the
 <p>The hypothesis is that when a user will really understands what the course is about and its structure, she will better know if she's ready to take the paid version. Thus the users, who would probably get frustrated further in the course and leave, will not proceed after Lesson 0, sparing time of our coaches and generally having better experience with Udacity.<br>
 For myself, I'd be happy to take more courses on Udacity on the topics that I haven't yet explored, if I knew which courses will be interesting for me. I could figure this out with an extended overview like a proposed "Lesson 0".</p>
 
-<p>Invariant metrics: number of clicks, number of user-ids and click-through probability.<br>
-These metrics shouldn't change as we are only altering the course after the enrollment.</p>
+<p>Invariant metric: number of user-ids. It shouldn't change as we are only altering the course after the enrollment.</p>
 
 <p>Evaluation metrics: Lesson 0 dropout rate (equals 0 for control group) and retention rate (number of users who make a payment divided by the number of enrolled users).<br>
 Figuring out  practical significance boundary for L0 dropout rate could be tricky, but if it is at least statistically significant, than we have successfully fitered out some people who would have otherwise dropped out further in the course.</p>
